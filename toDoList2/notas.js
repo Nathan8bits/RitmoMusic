@@ -33,27 +33,28 @@ const simbolos = {
 };
 
 const container = document.querySelector('.ritmos');
-
-// Limpa a div inicialmente (opcional)
 container.textContent = '';
 
 const botoes = document.querySelectorAll('#containerBotoes button');
+
+var musica = []
 
 botoes.forEach(btn => {
   btn.addEventListener('click', () => {
     const codigo = btn.getAttribute('data-simbolo');
     const simboloReal = simbolos[codigo];
+    musica.push(codigo);
 
     if (simboloReal) {
       container.textContent += simboloReal + ' ';
     }
+    console.log(musica)
   });
 });
 
 document.getElementById('apagar').addEventListener('click', () => {
   const atual = container.textContent.trimEnd();
-
-  // Remove o último caractere visível (símbolo)
+  
   container.textContent = atual.slice(0, atual.length - 1).trimEnd();
 });
 
