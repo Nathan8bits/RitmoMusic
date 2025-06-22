@@ -37,10 +37,9 @@ container.textContent = '';
 
 const botoes = document.querySelectorAll('#containerBotoes button');
 
-var musica = {
-  notas: [],
-  valor: 0
-}
+
+
+
 
 botoes.forEach(btn => {
   btn.addEventListener('click', () => {
@@ -65,5 +64,3 @@ document.getElementById('apagar').addEventListener('click', () => {
   // Atualiza o conteúdo
   container.textContent = chars.join('').trimEnd();
 });
-
-
