@@ -39,18 +39,127 @@ const botoes = document.querySelectorAll('#containerBotoes button');
 
 
 
+// Cada Nota é representada como um vetor de strings
+class Nota {
+  constructor() {
+    this.atomo = []; 
+  }
+  adicionarNota(valor) {
+    //this.atomo.push([])
+    this.atomo.push(valor)
+    //this.compassos[this.indexCompasso].notas.push(new Nota());
+  }
+}
 
+// Um compasso é um vetor de notas
+class Compasso {
+  constructor() {
+    this.notas = [new Nota([])]
+    //this.notas = notas.map(n => new Nota(n)); // cria Notas a partir dos vetores de string
+  }
+}
+
+// Uma música tem um vetor de compassos e um título
+class Musica {
+  constructor(titulo = "") {
+    this.titulo = titulo;
+    this.compassos = [
+      new Compasso([])
+    ]; // vetor de objetos Compasso
+    this.indexCompasso = 0;
+    this.indexNota = 0;
+    this.somaCompasso = 0;
+    this.somaNota = 0;
+    this.ultimoAtomo = 0;
+  }
+
+  adicionarCompasso(compasso) {
+    this.compassos.push(compasso);
+  }
+
+  proximoCompasso() {
+    this.indexCompasso++;
+    this.indexNota = 0;
+    this.somaCompasso = 0;
+    this.somaNota = 0;
+    this.ultimoAtomo = 0;
+    container.textContent += '| ';
+    console.log("barra de compasso")
+    
+    this.compassos.push(new Compasso());
+  }
+
+  proximaNota() {
+    this.indexNota++;
+    this.ultimoAtomo = 0;
+    this.somaNota = 0;
+
+    this.compassos[this.indexCompasso].notas.push(new Nota());
+  }
+
+  agrupar(atomo) {
+
+    //this.compassos[n].notas[m].adicionar(atomo)
+    if (atomo[1] <= 16 && atomo[1] >= 4 && (atomo[1] + this.somaCompasso) == 16)  
+    {
+      container.textContent += atomo[0];
+      console.log('opcao 1')
+      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]);
+      console.log(this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]))
+      this.proximoCompasso();
+    }
+    else if(atomo[1] <= 16 && atomo[1] >= 4 && (atomo[1] + this.somaCompasso) < 16) 
+    {
+      container.textContent += atomo[0];
+      console.log('opcao 2')
+      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]);
+      this.somaCompasso += atomo[1];   
+      this.proximaNota();
+    } 
+    else if ((atomo[1] == 2 || atomo[1] == 1) && (atomo[1] + this.somaNota) == 4 && (atomo[1] + this.somaCompasso == 16))
+    {
+      container.textContent += atomo[0];
+      console.log("opcao 3")
+      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]);
+      this.proximoCompasso();
+    }
+    else if ((atomo[1] == 2 || atomo[1] == 1) && (atomo[1] + this.somaNota) == 4 && (atomo[1] + this.somaCompasso < 16)) 
+    { //completando uma nota
+      container.textContent += atomo[0];
+      console.log("opcao 4")
+      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]);
+      this.somaCompasso += atomo[1];
+      this.proximaNota();
+    }
+    else if ((atomo[1] == 2 || atomo[1] == 1) && (this.somaNota + atomo[1]) < 4 && (atomo[1] + this.somaCompasso < 16)) 
+    {
+      container.textContent += atomo[0];
+      console.log("opcao 5")
+      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]);
+      this.somaCompasso += atomo[1];
+      this.somaNota += atomo[1];
+    }
+
+    
+    console.log(this)
+    console.log(`atomo: ${atomo[1]}, somaCompasso: ${this.somaCompasso}`)
+  }
+}
+
+
+var musicaAtual = new Musica('teste')
 
 botoes.forEach(btn => {
   btn.addEventListener('click', () => {
     const codigo = btn.getAttribute('data-simbolo');
     const simboloReal = simbolos[codigo]?.[0];
-    musica.push(codigo);
 
+   /* 
     if (simboloReal) {
       container.textContent += simboloReal + ' ';
-    }
-    console.log(musica)
+    }*/
+    
+    musicaAtual.agrupar(simbolos[codigo]);
   });
 });
 
