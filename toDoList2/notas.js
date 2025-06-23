@@ -42,11 +42,13 @@ const botoes = document.querySelectorAll('#containerBotoes button');
 // Cada Nota é representada como um vetor de strings
 class Nota {
   constructor() {
-    this.atomo = []; 
+    this.atomo = [];
+    this.simbolo = [];
   }
   adicionarNota(valor) {
     //this.atomo.push([])
-    this.atomo.push(valor)
+    this.atomo.push(valor[1]);
+    this.simbolo.push(valor[0]);
     //this.compassos[this.indexCompasso].notas.push(new Nota());
   }
 }
@@ -104,15 +106,14 @@ class Musica {
     {
       container.textContent += atomo[0];
       console.log('opcao 1')
-      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]);
-      console.log(this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]))
+      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo);
       this.proximoCompasso();
     }
     else if(atomo[1] <= 16 && atomo[1] >= 4 && (atomo[1] + this.somaCompasso) < 16) 
     {
       container.textContent += atomo[0];
       console.log('opcao 2')
-      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]);
+      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo);
       this.somaCompasso += atomo[1];   
       this.proximaNota();
     } 
@@ -120,14 +121,14 @@ class Musica {
     {
       container.textContent += atomo[0];
       console.log("opcao 3")
-      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]);
+      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo);
       this.proximoCompasso();
     }
     else if ((atomo[1] == 2 || atomo[1] == 1) && (atomo[1] + this.somaNota) == 4 && (atomo[1] + this.somaCompasso < 16)) 
     { //completando uma nota
       container.textContent += atomo[0];
       console.log("opcao 4")
-      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]);
+      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota();
       this.somaCompasso += atomo[1];
       this.proximaNota();
     }
@@ -135,7 +136,7 @@ class Musica {
     {
       container.textContent += atomo[0];
       console.log("opcao 5")
-      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota(atomo[1]);
+      this.compassos[this.indexCompasso].notas[this.indexNota].adicionarNota();
       this.somaCompasso += atomo[1];
       this.somaNota += atomo[1];
     }
@@ -152,12 +153,6 @@ var musicaAtual = new Musica('teste')
 botoes.forEach(btn => {
   btn.addEventListener('click', () => {
     const codigo = btn.getAttribute('data-simbolo');
-    const simboloReal = simbolos[codigo]?.[0];
-
-   /* 
-    if (simboloReal) {
-      container.textContent += simboloReal + ' ';
-    }*/
     
     musicaAtual.agrupar(simbolos[codigo]);
   });
